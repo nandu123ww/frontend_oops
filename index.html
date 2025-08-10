@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TechHub - Premium Electronics Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .product-card { transition: all 0.3s ease; }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .sale-badge { background: linear-gradient(45deg, #ff6b6b, #ee5a24); }
+        .new-badge { background: linear-gradient(45deg, #00d2d3, #54a0ff); }
+    </style>
+</head>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const username = localStorage.getItem("username");
+    if (username) {
+        const userLoginLink = document.querySelector('a[href="index-login.html"]');
+        if (userLoginLink) {
+            userLoginLink.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+            </svg>
+            <span class="hidden sm:inline text-sm font-medium">Welcome back, ${username}</span>`;
+        }
+
+        // Add "My Orders" link next to cart icon
+        const cartIcon = document.querySelector('a[href="index-cart.html"]');
+        if (cartIcon) {
+            const myOrdersLink = document.createElement("a");
+            myOrdersLink.href = "index-user-dashboard.html"; // change to your user dashboard page
+            myOrdersLink.className = "text-gray-700 hover:text-indigo-600 transition duration-300 flex items-center gap-2";
+            myOrdersLink.innerHTML = `<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 3h18M9 3v18m6-18v18"></path>
+            </svg>
+            <span class="hidden sm:inline text-sm font-medium">My Orders</span>`;
+            cartIcon.parentNode.insertBefore(myOrdersLink, cartIcon);
+        }
+    }
+});
+</script>
+<body class="bg-gray-50">
+
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="text-2xl font-bold gradient-text cursor-pointer">TechHub</div>
+
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-700 hover:text-indigo-600 font-medium">Home</a>
+                    <a href="#products" class="text-gray-700 hover:text-indigo-600 font-medium">Products</a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Search Icon -->
+                    <button class="text-gray-700 hover:text-indigo-600 transition duration-300" aria-label="Search">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+
+                    <!-- User Login Button -->
+                    <a href="index-login.html" class="text-gray-700 hover:text-indigo-600 transition duration-300 flex items-center gap-2" aria-label="User Login">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                        <span class="hidden sm:inline text-sm font-medium">User Login</span>
+                    </a>
+
+                    <!-- Admin Login Button -->
+                    <a href="index-admin-login.html" class="text-gray-700 hover:text-red-600 transition duration-300 flex items-center gap-2" aria-label="Admin Login">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M12 11c0-1.657 1.343-3 3-3s3 1.343 3 3-1.343 3-3 3-3-1.343-3-3zM4 20v-1a3 3 0 013-3h10a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span class="hidden sm:inline text-sm font-medium">Admin Login</span>
+                    </a>
+
+                    <!-- Cart Icon -->
+                    <a href="index-cart.html" class="relative text-gray-700 hover:text-indigo-600 transition duration-300" aria-label="Cart">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
+                        </svg>
+                        <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white py-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h1 class="text-5xl lg:text-6xl font-bold mb-6">Latest Electronics & Gadgets</h1>
+                    <p class="text-xl mb-8 opacity-90">Discover cutting-edge technology at unbeatable prices.</p>
+                    <a href="#products" class="bg-white text-indigo-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100">Shop Now</a>
+                </div>
+                <div class="text-center text-9xl opacity-80">📱💻🎧</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 gradient-text">Featured Products</h2>
+                <p class="text-xl text-gray-600">Handpicked items just for you</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                <!-- Product Card -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden relative">
+                    <div class="sale-badge absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">20% OFF</div>
+                    <a href="index-product-detail.html" class="block p-8">
+                        <div class="text-7xl text-center mb-6">📱</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">iPhone 15 Pro</h3>
+                        <p class="text-gray-600 mb-4">Latest iPhone with A17 Pro chip and titanium design</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-600">$799</span>
+                                <span class="text-lg text-gray-400 line-through ml-2">$999</span>
+                            </div>
+                            <div class="flex text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </a>
+                    <a href="index-cart.html" class="w-full block bg-indigo-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-indigo-700">Add to Cart</a>
+                </div>
+
+                <!-- Repeat for other products with same structure -->
+                <!-- Product Card -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden relative">
+                    <div class="new-badge absolute top-4 left-4 text-white px-3 py-1 rounded-full text-sm font-semibold z-10">NEW</div>
+                    <a href="index-product-detail.html" class="block p-8">
+                        <div class="text-7xl text-center mb-6">💻</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">MacBook Pro M3</h3>
+                        <p class="text-gray-600 mb-4">Powerful M3 chip with ProMotion display</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-600">$1999</span>
+                            </div>
+                            <div class="flex text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </a>
+                    <a href="index-cart.html" class="w-full block bg-indigo-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-indigo-700">Add to Cart</a>
+                </div>
+
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden relative">
+                    <a href="index-product-detail.html" class="block p-8">
+                        <div class="text-7xl text-center mb-6">🎧</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Sony WH-1000XM5</h3>
+                        <p class="text-gray-600 mb-4">Noise cancelling over-ear headphones</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-600">$399</span>
+                            </div>
+                            <div class="flex text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </a>
+                    <a href="index-cart.html" class="w-full block bg-indigo-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-indigo-700">Add to Cart</a>
+                </div>
+
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden relative">
+                    <a href="index-product-detail.html" class="block p-8">
+                        <div class="text-7xl text-center mb-6">⌚</div>
+                        <h3 class="text-xl font-semibold mb-3 text-gray-800">Apple Watch Ultra</h3>
+                        <p class="text-gray-600 mb-4">Rugged and capable for extreme activities</p>
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <span class="text-2xl font-bold text-indigo-600">$799</span>
+                            </div>
+                            <div class="flex text-yellow-400">⭐⭐⭐⭐⭐</div>
+                        </div>
+                    </a>
+                    <a href="index-cart.html" class="w-full block bg-indigo-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-indigo-700">Add to Cart</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <h3 class="text-2xl font-bold mb-6 gradient-text">TechHub</h3>
+                    <p class="text-gray-400 mb-6">Your trusted electronics store for the latest technology and gadgets.</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-6 text-lg">Quick Links</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-6 text-lg">Categories</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li><a href="#">Smartphones</a></li>
+                        <li><a href="#">Laptops</a></li>
+                        <li><a href="#">Audio</a></li>
+                        <li><a href="#">Wearables</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-6 text-lg">Customer Service</h4>
+                    <ul class="space-y-3 text-gray-400">
+                        <li>📞 1-800-TECHHUB</li>
+                        <li>✉️ support@techhub.com</li>
+                        <li>🕒 Mon-Fri: 9AM-6PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 TechHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
